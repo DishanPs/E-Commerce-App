@@ -5,23 +5,35 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Header from "./Header";
 import Footer from "./Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddProductModal from "./AddProductModal";
 import UpdateProductModal from "./UpdateProductModal";
 import DeleteProductModal from "./DeleteProductModal";
-import Badge from 'react-bootstrap/Badge';
+import Badge from "react-bootstrap/Badge";
+import axios from "axios";
 
 const Products = () => {
-  const [showadd, setShowAdd] = useState(false);
-  const [showedit, setShowEdit] = useState(false);
-  const [showdelete, setShowDelete] = useState(false);
+  const [showadd, setShowAdd] = React.useState(false);
+  const [showedit, setShowEdit] = React.useState(false);
+  const [showdelete, setShowDelete] = React.useState(false);
 
-  //const handleCloseAdd = () => setShowAdd(false);
-  const handleShowAdd = () => setShowAdd(true);
-  //const handleCloseEdit = () => setShowEdit(false);
-  const handleShowEdit = () => setShowEdit(true);
-  //const handleCloseDelete = () => setShowDelete(false);
-  const handleShowDelete = () => setShowDelete(true);
+  const [products, setProduct] = useState([]);
+  const [productdet, setProductdet] = useState();
+  const [productdelete, setProductdelete] = useState();
+
+  useEffect(() => {
+    const getProducts = () => {
+      axios
+        .get("https://localhost:7298/api/Products")
+        .then((res) => {
+          setProduct(res.data);
+        })
+        .catch((err) => {
+          alert(err.msg);
+        });
+    };
+    getProducts();
+  }, []);
 
   return (
     <div>
@@ -32,26 +44,48 @@ const Products = () => {
       <Button
         variant="success"
         style={{ marginLeft: "80%" }}
-        onClick={handleShowAdd}
+        onClick={() => setShowAdd(true)}
       >
         Add New Product
       </Button>
-      <div className="products">
+      <div className="productsui">
         <Row xs={1} md={2} className="g-4">
-          {Array.from({ length: 4 }).map((_, idx) => (
-            <Col key={idx}>
+          {products.map((product) => (
+            <Col key={product.id}>
               <Card>
-                <Card.Img variant="top" src="holder.js/100px160" />
+                <Card.Img
+                  variant="top"
+                  src={product.imageUrl}
+                  alt={product.productName}
+                  style={{ width: "25%", margin: "auto", display: "block" }}
+                />
                 <Card.Body>
-                  <Card.Title>Product Name <Badge bg="secondary" text="light">00</Badge></Card.Title>
+                  <Card.Title>
+                    {product.productName}{" "}
+                    <Badge bg="secondary" text="light">
+                      {product.quantity}
+                    </Badge>
+                  </Card.Title>
                   <Card.Text>
-                   Unit Price: $0.00
+                    Unit Price: LKR {product.price.toFixed(2)}
                   </Card.Text>
-                  <Button variant="success" onClick={handleShowEdit}>
+                  <Button
+                    variant="success"
+                    onClick={() => {
+                      setShowEdit(true);
+                      setProductdet(product);
+                    }}
+                  >
                     Edit
                   </Button>{" "}
                   &nbsp;
-                  <Button variant="danger" onClick={handleShowDelete}>
+                  <Button
+                    variant="danger"
+                    onClick={() => {
+                      setShowDelete(true);
+                      setProductdelete(product);
+                    }}
+                  >
                     Delete
                   </Button>{" "}
                   &nbsp;
@@ -64,10 +98,17 @@ const Products = () => {
       </div>
       <Footer />
       <AddProductModal show={showadd} onHide={() => setShowAdd(false)} />
-      <UpdateProductModal show={showedit} onHide={() => setShowEdit(false)} />
+
+      <UpdateProductModal
+        show={showedit}
+        onHide={() => setShowEdit(false)}
+        productdet={productdet}
+      />
+
       <DeleteProductModal
         show={showdelete}
         onHide={() => setShowDelete(false)}
+        productdelete={productdelete}
       />
     </div>
   );

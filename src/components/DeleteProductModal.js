@@ -2,6 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalBody from "react-bootstrap/esm/ModalBody";
+import DeleteProductForm from "../components/DeleteProductForm";
 
 const DeleteProductModal = (props) => {
   return (
@@ -14,13 +15,12 @@ const DeleteProductModal = (props) => {
       <Modal.Header closeButton>
         <Modal.Title>Delete Product</Modal.Title>
       </Modal.Header>
-      <ModalBody>Are you sure you want to delete this product?</ModalBody>
+      <ModalBody>
+        <DeleteProductForm product={props.productdelete} />
+      </ModalBody>
 
       <Modal.Footer>
-        <Button variant="danger" onClick={props.onHide}>
-          Delete
-        </Button>
-        <Button variant="dark"  onClick={props.onHide}>
+        <Button variant="dark" onClick={props.onHide}>
           Close
         </Button>
       </Modal.Footer>

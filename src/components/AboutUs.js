@@ -30,10 +30,7 @@ const AboutUs = () => {
           <h3>Happy Shopping!</h3>
         </div>
         <div>
-          <img
-            src="../logo.png"
-            alt="OftenSale Logo"
-          />
+          <img src="../logo.png" alt="OftenSale Logo" />
         </div>
       </div>
       <Footer />

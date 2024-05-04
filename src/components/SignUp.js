@@ -73,6 +73,7 @@ const SignUp = () => {
         <br />
         <br />
       </div>
+      <br />
     </div>
   );
 };

@@ -16,7 +16,7 @@ const UpdateProductModal = (props) => {
         <Modal.Title>Edit Product</Modal.Title>
       </Modal.Header>
       <ModalBody>
-        <UpdateProductForm />
+        <UpdateProductForm det={props.productdet} />
       </ModalBody>
 
       <Modal.Footer>
